@@ -2,9 +2,10 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import NFTAbi from "@/ABIs/BuidlNFT.json";
 import StakingAbi from "@/ABIs/Staking.json";
-import { useAccount, useContract, useSigner } from "wagmi";
+import { useAccount, useContract, useProvider, useSigner } from "wagmi";
 
 const NFTCard = ({ url, stake, tokenId }) => {
+  const provider = useProvider();
   const [nft, setNft] = useState({
     name: "",
     image: "",
