@@ -116,3 +116,6 @@ const NFTCard = ({ url, stake, tokenId }) => {
 };
 
 export default NFTCard;
+
+
+//vkfnvjnfjdnvfd
