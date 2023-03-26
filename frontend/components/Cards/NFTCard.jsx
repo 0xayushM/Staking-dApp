@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import NFTAbi from "@/ABIs/BuidlNFT.json";
-import StakingAbi from "@/ABIs/Staking.json";
+import BuidlNFT from "@/ABIs/BuidlNFT.json";
+import Staking from "@/ABIs/Staking.json";
 import { useAccount, useContract, useProvider, useSigner } from "wagmi";
 
 const NFTCard = ({ url, stake, tokenId }) => {
+  const { data: signer } = useSigner();
+  const { address } = useAccount();
   const provider = useProvider();
   const [nft, setNft] = useState({
     name: "",
@@ -12,34 +14,42 @@ const NFTCard = ({ url, stake, tokenId }) => {
     desc: "",
     tokenID: tokenId,
   });
-   const stakeNft = async () => {
-     try {
-       const approve = await nftContract?.isApprovedForAll(
-         address,
-         StakingAbi.address
-       );
-       console.log(approve);
-       if (!approve) {
-         const tx1 = await nftContract?.setApprovalForAll(
-           StakingAbi.address,
-           true
-         );
-       }
-       setTimeout(async () => {
-         const tx = await stakingContract?.stakeNFT(nft.tokenID);
-         console.log(tx);
-         window.alert("NFT Stake Successful");
-       }, 2000);
-     } catch (err) {
-       console.log(err);
-     }
-   };
+  const stakingContract = useContract({
+    address: Staking.address,
+    abi: Staking.abi,
+    signerOrProvider: signer,
+  });
+  const nftContract = useContract({
+    address: BuidlNFT.address,
+    abi: BuidlNFT.abi,
+    signerOrProvider: signer,
+  });
+  const stakeNft = async () => {
+    try {
+      const approve = await nftContract?.isApprovedForAll(
+        address,
+        Staking.address
+      );
+      console.log(approve);
+      if (!approve) {
+        const tx1 = await nftContract?.setApprovalForAll(Staking.address, true);
+      }
+      setTimeout(async () => {
+        const tx = await stakingContract?.stakeNFT(nft.tokenID);
+        console.log(tx);
+        window.alert("NFT Stake Successful");
+      }, 2000);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const unStakeNft = async () => {
     try {
       const tx = await stakingContract?.unStakeNFT(nft.tokenID);
       console.log(tx);
       const approve = await nftContract?.setApprovalForAll(
-        StakingAbi.address,
+        Staking.address,
         false
       );
       console.log(tx);
@@ -48,18 +58,6 @@ const NFTCard = ({ url, stake, tokenId }) => {
       console.log(err);
     }
   };
-
-   const stakingContract = useContract({
-     address: StakingAbi.address,
-     abi: StakingAbi.abi,
-     signerOrProvider: provider,
-   });
-
-   const nftContract = useContract({
-     address: NFTAbi.address,
-     abi: NFTAbi.abi,
-     signerOrProvider: provider,
-   });
 
   useEffect(() => {
     const getData = async () => {
@@ -99,15 +97,24 @@ const NFTCard = ({ url, stake, tokenId }) => {
       ) : (
         <div>
           <section className="text-center max-w-fit border px-3  rounded-md border-[#ffffff82] shadow-lg hover:scale-105">
-            <h2 className="text-2xl my-2">{nft.name}</h2>
-            <Image src={nft.image} alt={nft.name} width={200} height={400} />
-            <h2 className="text-md text-[#ffffffbe] mt-2">{nft.desc}</h2>
-            <button
-              className="bg-[#ff0909] px-3 py-1 my-3 rounded-md font-medium mb-3 w-[60%] text-lg hover:scale-105"
-              onClick={unStakeNft}
-            >
-              Withdraw
-            </button>
+            {nft && (
+              <>
+                <h2 className="text-2xl my-2">{nft.name}</h2>
+                <Image
+                  src={nft.image}
+                  alt={nft.name}
+                  width={200}
+                  height={400}
+                />
+                <h2 className="text-md text-[#ffffffbe] mt-2">{nft.desc}</h2>
+                <button
+                  className="bg-[#ff0909] px-3 py-1 my-3 rounded-md font-medium mb-3 w-[60%] text-lg hover:scale-105"
+                  onClick={unStakeNft}
+                >
+                  Withdraw
+                </button>
+              </>
+            )}
           </section>
         </div>
       )}
@@ -116,6 +123,3 @@ const NFTCard = ({ url, stake, tokenId }) => {
 };
 
 export default NFTCard;
-
-
-//vkfnvjnfjdnvfd
