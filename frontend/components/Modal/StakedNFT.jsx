@@ -5,7 +5,7 @@ import Staking from "@/ABIs/Staking.json";
 import { useAccount, useContract, useProvider } from "wagmi";
 import { ethers } from "ethers";
 
-const StakedNft = () => {
+const StakedNFT = () => {
   const { address } = useAccount();
   const provider = useProvider();
   const [rewardBal, setRewardBal] = useState();
@@ -66,4 +66,4 @@ const StakedNft = () => {
   );
 };
 
-export default StakedNft;
+export default StakedNFT;

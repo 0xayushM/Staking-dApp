@@ -3,7 +3,7 @@ import BuidlNFT from "@/ABIs/BuidlNFT.json";
 import NFTCard from "../Cards/NFTCard";
 import { useAccount, useContract, useSigner } from "wagmi";
 
-const UnstakedNft = () => {
+const UnstakedNFT = () => {
   const { data: signer } = useSigner();
   const { address } = useAccount();
   const [nfts, setNfts] = useState([]);
@@ -46,4 +46,4 @@ const UnstakedNft = () => {
   );
 };
 
-export default UnstakedNft;
+export default UnstakedNFT;

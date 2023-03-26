@@ -1,7 +1,7 @@
 import Head from "next/head";
 import TokenBal from "@/components/Modal/TokenBal";
-import StakedNft from "@/components/Modal/StakedNft";
-import UnstakedNft from "@/components/Modal/UnstakedNft";
+import StakedNFT from "@/components/Modal/StakedNFT";
+import UnstakedNFT from "@/components/Modal/UnstakedNFT";
 import { useAccount } from "wagmi";
 
 export default function Home() {
@@ -19,8 +19,8 @@ const { address } = useAccount();
         {address ? (
           <div>
             <TokenBal />
-            <StakedNft />
-            <UnstakedNft />
+            <StakedNFT />
+            <UnstakedNFT />
           </div>
         ) : (
           <div className="flex justify-center">
